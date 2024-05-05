@@ -1,3 +1,9 @@
+import { RoleFilter } from "./RoleFilter";
+
 export const Filters = () => {
-  return <div>Filters</div>;
+  return (
+    <div>
+      <RoleFilter />
+    </div>
+  );
 };
