@@ -1,0 +1,50 @@
+.jobcard-grid-container {
+  padding: 2rem;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-evenly;
+  gap: 5;
+}
+
+.card-container {
+  flex-grow: 1;
+  max-width: 22rem;
+  transition: transform 0.3s ease;
+}
+
+.card-container:hover {
+  transform: scale(1.02);
+}
+
+.job-card-container {
+  display: flex;
+  justify-content: center;
+}
+
+.chip-container {
+  padding: 1rem;
+}
+
+.chip {
+  background-color: rgba(256, 256, 256, 1) !important;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+}
+
+.job-description {
+  max-height: 250px;
+  overflow: hidden;
+  mask-image: linear-gradient(
+    rgb(255, 255, 255),
+    rgb(255, 255, 255),
+    rgba(255, 255, 255, 0)
+  );
+}
+
+.viewjob-btn {
+  text-align: center;
+  margin-bottom: 0.5rem;
+  position: relative;
+  top: -20px;
+}
