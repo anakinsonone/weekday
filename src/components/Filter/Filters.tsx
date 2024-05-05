@@ -1,7 +1,6 @@
 import { Grid } from "@mui/material";
 
 import { Filter } from "./";
-
 import {
   baseSalary,
   experience,
@@ -10,11 +9,18 @@ import {
   roles,
   techStack,
 } from "./utils/constants";
+import "./style.css";
 
 export const Filters = () => {
   return (
     <div>
-      <Grid container spacing={2}>
+      <Grid
+        container
+        spacing={2}
+        columnSpacing={4}
+        rowSpacing={{ xs: 2, sm: 2, md: 4 }}
+        className="filter"
+      >
         <Filter title="Roles" multi={true} options={roles} />
         <Filter
           title="No Of Employees"
