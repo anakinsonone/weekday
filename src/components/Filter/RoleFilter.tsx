@@ -11,49 +11,7 @@ import {
 } from "@mui/material";
 import CancelIcon from "@mui/icons-material/Cancel";
 
-const roles = [
-  "Frontend",
-  "Backend",
-  "Fullstack",
-  "IOS",
-  "Flutter",
-  "React Native",
-  "Android",
-  "Tech Lead",
-  "Dev-Ops",
-  "Data Engineer",
-  "Data Science",
-  "Computer Vision",
-  "NLP",
-  "Deep-Learning",
-  "Test / QA",
-  "Web3",
-  "SRE",
-  "Data-Infrastructure",
-  "Designer",
-  "Design Manager",
-  "Graphic Designer",
-  "Product Designer",
-  "Product Manager",
-  "Operations Manager",
-  "Founder's Office / Chief of Staff",
-  "Sales Development Representative",
-  "Account Executive",
-  "Account Manager",
-  "Digital Marketing Manager",
-  "Growth Hacker",
-  "Marketing",
-  "Product Marketing Manager",
-  "Hardware",
-  "Mechanical",
-  "Systems",
-  "Business Analyst",
-  "Data Analyst",
-  "HR",
-  "Legal",
-  "Management",
-  "Finance",
-];
+import { roles } from "./utils/constants";
 
 export const RoleFilter = () => {
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
