@@ -1,7 +1,7 @@
 import { MultiValue, SingleValue } from "react-select";
 import { Grid } from "@mui/material";
 
-import { Filter } from "./";
+import { Filter, CompanyNameFilter } from "./";
 import {
   baseSalary,
   experience,
@@ -17,7 +17,7 @@ export const Filters = ({
 }: {
   handleFilterChange: (
     filterName: string,
-    selectedOptions: SingleValue<object> | MultiValue<object>,
+    selectedOptions: SingleValue<object> | MultiValue<object> | string,
   ) => void;
 }) => {
   return (
@@ -71,6 +71,7 @@ export const Filters = ({
           handleFilterChange={handleFilterChange}
           filterName="baseSalary"
         />
+        <CompanyNameFilter handleFilterChange={handleFilterChange} />
       </Grid>
     </div>
   );
