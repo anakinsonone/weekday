@@ -19,6 +19,20 @@ export const JobCard = ({
 }: {
   jobDescription: JobDescription;
 }) => {
+  const maxSalary = jobDescription.maxJdSalary
+    ? jobDescription.maxJdSalary.toLocaleString("en-US", {
+        style: "currency",
+        currency: jobDescription.salaryCurrencyCode,
+      })
+    : 0;
+
+  const minSalary = jobDescription.minJdSalary
+    ? jobDescription.minJdSalary.toLocaleString("en-US", {
+        style: "currency",
+        currency: jobDescription.salaryCurrencyCode,
+      })
+    : 0;
+
   return (
     <Grid item xs={12} sm={6} md={4} className="job-card-container">
       <Box className="card-container">
@@ -51,6 +65,8 @@ export const JobCard = ({
                         sx={{ fontSize: "0.85rem", fontWeight: "semibold" }}
                         variant="subtitle1"
                         color="text.secondary"
+                        component="a"
+                        href={jobDescription.jdLink}
                       >
                         {jobDescription.companyName}
                       </Typography>
@@ -75,8 +91,7 @@ export const JobCard = ({
                 sx={{ fontSize: 14, fontWeight: "bold" }}
                 gutterBottom
               >
-                Estimated Salary: {jobDescription.minJdSalary ?? 0} -{" "}
-                {jobDescription.maxJdSalary ?? 0}{" "}
+                Estimated Salary: {minSalary} - {maxSalary}
               </Typography>
               <Box className="job-description">
                 <Typography variant="body2" sx={{ fontSize: 14 }}>
@@ -87,7 +102,7 @@ export const JobCard = ({
                 <Button variant="text">View job</Button>
               </Box>
               <Typography sx={{ fontSize: 14 }} gutterBottom>
-                Minimum Experience: {jobDescription.minExp} years
+                Minimum Experience: {jobDescription.minExp ?? 0} years
               </Typography>
               <Button
                 variant="contained"
