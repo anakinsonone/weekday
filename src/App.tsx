@@ -16,6 +16,7 @@ const App = () => {
     jobLocation: [],
     techStack: [],
     baseSalary: [],
+    companyName: "",
   });
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -92,44 +93,70 @@ const App = () => {
   }, [offset, isLoading]);
 
   useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      const entry = entries[0];
-      if (entry.isIntersecting) {
+    const listInnerElement = containerRef.current;
+    if (listInnerElement) {
+      listInnerElement.addEventListener("scroll", onScroll);
+
+      // Clean-up
+      return () => {
+        listInnerElement.removeEventListener("scroll", onScroll);
+      };
+    }
+  });
+
+  const onScroll = () => {
+    if (containerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
+      const isNearBottom = scrollTop + clientHeight >= scrollHeight;
+
+      if (isNearBottom) {
         fetchAdditionalData();
       }
-    });
-
-    if (containerRef.current) {
-      observer.observe(containerRef.current);
     }
-
-    const currRef = containerRef.current;
-    return () => {
-      if (currRef) {
-        observer.unobserve(currRef);
-      }
-    };
-  }, [fetchAdditionalData]);
+  };
 
   const handleFilterChange = (
     filterName: string,
-    selectedOptions: SingleValue<object> | MultiValue<object>,
+    selectedOptions: SingleValue<object> | MultiValue<object> | string,
   ) => {
     if (selectedOptions) {
-      setFilters((prevFilters) => ({
-        ...prevFilters,
-        [filterName]: selectedOptions.map((option) => option?.value),
-      }));
+      if (filterName === "companyName") {
+        console.log(selectedOptions);
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          [filterName]: selectedOptions.toLowerCase(),
+        }));
+        console.log({
+          ...filters,
+          [filterName]: selectedOptions.toLowerCase(),
+        });
+      } else {
+        setFilters((prevFilters) => ({
+          ...prevFilters,
+          [filterName]: selectedOptions.map((option) => {
+            if (typeof option === "string") {
+              return option?.value.toLowerCase();
+            } else {
+              return option?.value;
+            }
+          }),
+        }));
+      }
     }
   };
 
   const filterJobDescriptions = (job: JobDescription) => {
     if (job) {
+      const { roles, baseSalary, experience, jobLocation, companyName } =
+        filters;
+
       return (
-        filters.roles.includes(job?.jobRole) &&
-        filters.jobLocation.includes(job?.location) &&
-        filters.experience.includes(job?.minExp) &&
-        filters.baseSalary.includes(job?.minJdSalary)
+        (!roles.length || roles.includes(job.jobRole)) &&
+        (!jobLocation.length || jobLocation.includes(job?.location)) &&
+        (!experience.length || experience.includes(job?.minExp)) &&
+        (!baseSalary.length || baseSalary.includes(job?.minJdSalary)) &&
+        (!companyName.length ||
+          companyName.includes(job?.companyName?.toLowerCase()))
       );
     } else return;
   };
@@ -139,18 +166,23 @@ const App = () => {
   return (
     <div>
       <Filters handleFilterChange={handleFilterChange} />
-      <Grid
-        container
-        columnSpacing={4}
-        rowSpacing={{ xs: 6, sm: 6, md: 4 }}
+
+      <div
         ref={containerRef}
-        className="jobcard-grid-container"
+        style={{ maxHeight: "80vh", overflowY: "scroll" }}
       >
-        {currentJDs.map((jd, idx) => (
-          <JobCard key={idx} jobDescription={jd} />
-        ))}
-      </Grid>
-      <div ref={containerRef}>{isLoading && <Loader />}</div>
+        <Grid
+          container
+          columnSpacing={4}
+          rowSpacing={{ xs: 6, sm: 6, md: 4 }}
+          className="jobcard-grid-container"
+        >
+          {filteredJDs.map((jd, idx) => (
+            <JobCard key={idx} jobDescription={jd} />
+          ))}
+        </Grid>
+      </div>
+      <div>{isLoading && <Loader />}</div>
     </div>
   );
 };
