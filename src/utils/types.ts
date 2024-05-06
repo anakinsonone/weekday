@@ -9,6 +9,6 @@ export type JobDescription = {
   minExp: number | null;
   maxExp: number | null;
   jobRole: string;
-  companyName: string;
+  companyName: string | null;
   logoUrl: string;
 };
