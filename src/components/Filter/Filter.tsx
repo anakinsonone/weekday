@@ -1,4 +1,4 @@
-import Select from "react-select";
+import Select, { MultiValue, SingleValue } from "react-select";
 import { Box, FormControl, Grid, Typography } from "@mui/material";
 
 import "./style.css";
@@ -8,12 +8,21 @@ export const Filter = ({
   title,
   options,
   multi,
+  handleFilterChange,
+  filterName,
 }: {
   title: string;
   options: object[];
   multi: boolean;
+  handleFilterChange: (
+    filterName: string,
+    selectedOptions: SingleValue<object> | MultiValue<object>,
+  ) => void;
+  filterName: string;
 }) => {
-  const [selectedOptions, setSelectedOptions] = useState<any[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<
+    SingleValue<object> | MultiValue<object>
+  >([]);
 
   return (
     <Grid item md={2} xs={5} sm={4} className="filter">
@@ -21,7 +30,7 @@ export const Filter = ({
         <Box>
           {" "}
           <Typography
-            visibility={selectedOptions.length > 0 ? "visible" : "hidden"}
+            visibility={selectedOptions?.length > 0 ? "visible" : "hidden"}
           >
             {title}
           </Typography>
@@ -31,7 +40,10 @@ export const Filter = ({
           placeholder={title}
           isMulti={multi}
           options={options}
-          onChange={(selected) => setSelectedOptions(selected)}
+          onChange={(selected) => {
+            setSelectedOptions(selected);
+            handleFilterChange(filterName, selected);
+          }}
         />
       </FormControl>
     </Grid>
