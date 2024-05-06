@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Grid } from "@mui/material";
+import { MultiValue, SingleValue } from "react-select";
 
 import { JobDescription } from "./utils/types";
 import { Loader, JobCard, Filters } from "./components";
@@ -8,6 +9,14 @@ const App = () => {
   const [offset, setOffset] = useState(0);
   const [currentJDs, setCurrentJDs] = useState<JobDescription[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [filters, setFilters] = useState({
+    roles: [],
+    noOfEmployees: [],
+    experience: [],
+    jobLocation: [],
+    techStack: [],
+    baseSalary: [],
+  });
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -102,9 +111,34 @@ const App = () => {
     };
   }, [fetchAdditionalData]);
 
+  const handleFilterChange = (
+    filterName: string,
+    selectedOptions: SingleValue<object> | MultiValue<object>,
+  ) => {
+    if (selectedOptions) {
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        [filterName]: selectedOptions.map((option) => option?.value),
+      }));
+    }
+  };
+
+  const filterJobDescriptions = (job: JobDescription) => {
+    if (job) {
+      return (
+        filters.roles.includes(job?.jobRole) &&
+        filters.jobLocation.includes(job?.location) &&
+        filters.experience.includes(job?.minExp) &&
+        filters.baseSalary.includes(job?.minJdSalary)
+      );
+    } else return;
+  };
+
+  const filteredJDs = currentJDs.filter(filterJobDescriptions);
+
   return (
     <div>
-      <Filters />
+      <Filters handleFilterChange={handleFilterChange} />
       <Grid
         container
         columnSpacing={4}
