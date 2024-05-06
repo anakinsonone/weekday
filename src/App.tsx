@@ -121,15 +121,10 @@ const App = () => {
   ) => {
     if (selectedOptions) {
       if (filterName === "companyName") {
-        console.log(selectedOptions);
         setFilters((prevFilters) => ({
           ...prevFilters,
           [filterName]: selectedOptions.toLowerCase(),
         }));
-        console.log({
-          ...filters,
-          [filterName]: selectedOptions.toLowerCase(),
-        });
       } else {
         setFilters((prevFilters) => ({
           ...prevFilters,
